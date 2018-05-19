@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Random Quotes Viewer</title>
+
+    <link rel="stylesheet" href="quotes.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Amiri|Roboto:100i" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+
+      $(document).ready(function(){
+
+        var colorsBucket = [];
+        var colorsUsed = [];
+        var quoteUrl = "https://talaikis.com/api/quotes/random/";
+
+        colorsBucket.push("#74dce8");
+        colorsBucket.push("#00a0f7");
+        colorsBucket.push("#d19aed");
+        colorsBucket.push("#f99dc8");
+        colorsBucket.push("#ed8484");
+        colorsBucket.push("#ffc39b");
+        colorsBucket.push("#2d5b6b");
+        colorsBucket.push("#c47a53");
+        colorsBucket.push("#72696c");
+        colorsBucket.push("#c094cc");
+        colorsBucket.push("#c37892");
+        colorsBucket.push("#7b7d2a");
+
+        function pickColor() {
+          if (colorsBucket.length > 1) {
+            colorsBucket.sort(function(a, b){return 0.5 - Math.random()});  //using the compare function to shuffle the array randomly
+            colorsUsed.unshift(colorsBucket.pop());
+            return colorsUsed[0];
+          } else {
+            colorsBucket = colorsUsed;
+            colorsUsed = [];
+            pickColor();
+          }
+        }
+
+        function getQuote(quoteUrl) {
+          $.getJSON(quoteUrl, function(json){
+            $("#myJsonQuote").html("\"" + json.quote + "\" ");
+            $("#myJsonAuthor").html("– " + json.author);
+            $("#tweet-container").attr("href", "https://twitter.com/intent/tweet?text=" + "\"" + json.quote + "\" - " + json.author + "&via=marcovidonis&hashtags=FCC,randomquote&url=https%3A%2F%2Fcodepen.io%2Fmarcovidonis%2Ffull%2FQrzxRr")
+          });
+        }
+
+        getQuote(quoteUrl);
+        $("body").css("background-color", pickColor());
+
+        $("#newQuoteButton").on("click", function(){
+          $("body").css("background-color", pickColor());
+          getQuote(quoteUrl);
+        });
+      });
+
+    </script>
+
+
+    <style>
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div><h1>Random Quotes Viewer</h1></div>
+
+      <div id="text-container">
+        <div id="myJsonQuote"></div>
+        <div id="myJsonAuthor"></div>
+      </div>
+
+      <div class="buttons-container">
+        <a id="newQuoteButton"><i class="fas fa-redo-alt"></i>&nbsp New Quote</a>
+
+        <a id="tweet-container" href="#" target="_blank"><i class="fab fa-twitter"></i>&nbsp Tweet</a>
+      </div>
+      <div class="acknowledge"><p>Random Quotes API thanks to <a href="https://talaikis.com/" target="_none">talaikis.com</a></p></div>
+
+
+    <footer>Made by Marco Vidonis, 2018 –
+      &nbsp <a href="https://github.com/marcovidonis" target="_none"><i class="fab fa-github"></i></a>
+      &nbsp &nbsp <a href="https://twitter.com/marcovidonis" target="_none"><i class="fab fa-twitter"></i></a>
+      &nbsp &nbsp <a href="https://www.freecodecamp.org/marcovidonis" target="_none"><i class="fab fa-free-code-camp"></i></a>
+    </footer>
+    </div>
+  </body>
+</html>
