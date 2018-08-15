@@ -1,9 +1,18 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:image" content="" />
+    <meta property="og:title" content="Random Quotes Viewer" />
+    <meta property="og:description" content="Explore the knowledge of great thinkers through their most famous quotes!" />
+
     <title>Random Quotes Viewer</title>
 
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="animate.css">
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
     <link href="https://fonts.googleapis.com/css?family=Amiri|Roboto:100i" rel="stylesheet">
@@ -51,13 +60,32 @@
           });
         }
 
-        getQuote(quoteUrl);
-        $("body").css("background-color", pickColor());
+        function removeContainer() {
+          //deferred object so I can use .done()
+          var r = $.Deferred();
+
+          $("#text-container").removeClass().addClass("hinge animated");
+
+          setTimeout(function() {
+            r.resolve();
+          }, 2500);
+
+          return r;
+        }
+
+        function showQuote() {
+          getQuote(quoteUrl);
+          $("#text-container").removeClass().addClass("zoomIn animated");
+          $("body").css("background-color", pickColor());
+        }
+
+
+        showQuote();
 
         $("#newQuoteButton").on("click", function(){
-          $("body").css("background-color", pickColor());
-          getQuote(quoteUrl);
+          removeContainer().done(showQuote);
         });
+
       });
 
     </script>
@@ -71,7 +99,7 @@
     <div class="container">
       <div><h1>Random Quotes Viewer</h1></div>
 
-      <div id="text-container">
+      <div id="text-container" class="zoomIn animated">
         <div id="myJsonQuote"></div>
         <div id="myJsonAuthor"></div>
       </div>
@@ -83,12 +111,13 @@
       </div>
       <div class="acknowledge"><p>Random Quotes API thanks to <a href="https://talaikis.com/" target="_none">talaikis.com</a></p></div>
 
-
+    </div>
+    
     <footer>Made by Marco Vidonis, 2018 –
       &nbsp <a href="https://github.com/marcovidonis" target="_none"><i class="fab fa-github"></i></a>
       &nbsp &nbsp <a href="https://twitter.com/marcovidonis" target="_none"><i class="fab fa-twitter"></i></a>
       &nbsp &nbsp <a href="https://www.freecodecamp.org/marcovidonis" target="_none"><i class="fab fa-free-code-camp"></i></a>
     </footer>
-    </div>
+
   </body>
 </html>
