@@ -52,11 +52,19 @@
         }
 
         function getQuote(quoteUrl) {
+          var r = $.Deferred();
+
           $.getJSON(quoteUrl, function(json){
             $("#myJsonQuote").html("\"" + json.quote + "\" ");
             $("#myJsonAuthor").html("– " + json.author);
             $("#tweet-container").attr("href", "https://twitter.com/intent/tweet?text=" + "\"" + json.quote + "\" - " + json.author + "&via=marcovidonis&hashtags=FCC,randomquote&url=https%3A%2F%2Fcodepen.io%2Fmarcovidonis%2Ffull%2FQrzxRr")
           });
+
+          setTimeout(function() {
+            r.resolve();
+          }, 500);
+
+          return r;
         }
 
         function removeContainer() {
@@ -73,9 +81,11 @@
         }
 
         function showQuote() {
-          getQuote(quoteUrl);
-          $("#text-container").removeClass().addClass("zoomIn animated");
-          $("body").css("background-color", pickColor());
+          getQuote(quoteUrl).done(function() {
+            $("#text-container").removeClass().addClass("zoomIn animated");
+            $("body").css("background-color", pickColor());
+          });
+
         }
 
 
